@@ -10,8 +10,8 @@ app = Flask(__name__)
 # returns the data that we send when we use POST. 
 @app.route('/', methods = ['GET', 'POST'])
 def home():
-        data = "up"
-        return jsonify({'status': data})
+        status = "up"
+        return jsonify({'status': status})
 
 
 # A simple function to calculate the square of a number 
@@ -20,7 +20,27 @@ def home():
 # this returns 100 (square of 10) 
 @app.route('/square/<int:num>', methods = ['GET'])
 def disp(num):
-        return jsonify({'data': num**2})
+        return jsonify({'data': num**2}), 201
+
+
+"""
+Function returns the dummy matrix in response
+"""
+@app.route('/matrix', methods = ['GET'])
+def matrix():
+        status = "up"
+        return jsonify({'status': status})
+
+
+# login
+@app.route(...)
+def login():
+        username = request.args.get('username')
+        password = request.args.get('password')
+        status = false
+        if username == 'user' and password == 'pass':
+              status = true
+        return jsonify({'authorized': status})
 
 
 # driver function 
