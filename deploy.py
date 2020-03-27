@@ -6,10 +6,14 @@ from flask_restplus import Api, Resource, fields
 
 # creating a Flask app 
 app = Flask(__name__)
+api = Api(app, version='1.0', title='Todo API',
+    description='A simple TODO API extracted from the original flask-restful example'
+)
 
 # on the terminal type: curl http://127.0.0.1:5000/ 
 # returns hello world when we use GET. 
 # returns the data that we send when we use POST. 
+@api.doc(responses={404: 'Todo not found'}, params={'todo_id': 'The Todo ID'})
 @app.route('/', methods = ['GET', 'POST'])
 def home():
         status = "up"
