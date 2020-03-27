@@ -47,7 +47,7 @@ def alterCompatibility():
         v = request.args.get('vProductId')
         if u is None or v is None:
                 abort(400) # missing arguments or auth header
-        return None, 204
+        return ('', 204)
 
 
 @app.before_request
