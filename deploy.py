@@ -2,6 +2,7 @@
 # import necessary libraries and functions 
 from flask import Flask, jsonify, request
 from flask_restplus import Api, Resource, fields
+from werkzeug.exceptions import BadRequest
 
 
 # creating a Flask app 
@@ -32,19 +33,36 @@ Function returns the dummy matrix in response
 @app.route('/matrix', methods = ['GET'])
 def getCompatibility():
         return jsonify([
-            {'id': 1, 'name': 'Product 1', 'shortDescription': 'SD', 'fullDescription': 'FD', 'compatibleProducts':[2,4], 'categoryId':1, 'media':{'id':1,'key':'s3objectkey1', 'url':'https://swagger.io/'}},
-            {'id': 2, 'name': 'Product 2', 'shortDescription': 'SD2', 'fullDescription': 'FD2', 'compatibleProducts':[1], 'categoryId':2, 'media':{'id':2,'key':'s3objectkey2', 'url':'https://swagger.io/'}},
-            {'id': 4, 'name': 'Product 3', 'shortDescription': 'SD4', 'fullDescription': 'FD5', 'compatibleProducts':[1], 'categoryId':1, 'media':{'id':3,'key':'s3objectkey3', 'url':'https://swagger.io/'}}
+            {'id': 1, 'name': 'Product 1', 'shortDescription': 'SD', 'fullDescription': 'FD', 'compatibleProducts':[14,4], 'categoryId':1, 'media':{'id':1,'key':'s3objectkey1', 'url':'https://swagger.io/'}},
+            {'id': 2, 'name': 'Product 2', 'shortDescription': 'SD2', 'fullDescription': 'FD2', 'compatibleProducts':[14], 'categoryId':2, 'media':{'id':12,'key':'s3objectkey2', 'url':'https://swagger.io/'}},
+            {'id': 14, 'name': 'Product 3', 'shortDescription': 'SD14', 'fullDescription': 'FD14', 'compatibleProducts':[1,2,4], 'categoryId':1},
+            {'id': 4, 'name': 'Product 4', 'shortDescription': 'SD4', 'fullDescription': 'FD5', 'compatibleProducts':[1,14], 'categoryId':1, 'media':{'id':3,'key':'s3objectkey3', 'url':'https://swagger.io/'}},
+            {'id': 3, 'name': 'Product 45', 'shortDescription': 'DS', 'fullDescription': 'DF', 'compatibleProducts':[], 'categoryId':2, 'media':{'id':44,'key':'s3objectkey4', 'url':'https://swagger.io/'}}
         ])
 
 
-@app.route('/matrix', methods = ['POST'])
-def createCompatibility():
-        username = request.json.get('u_id')
-        password = request.json.get('v_id')
-        v_id = request.args.get('v_id')
-        page = request.args.get('page', default = 1, type = int)
-        return jsonify({'vidinheader':v_id, 'username':username, 'pass': password, 'pageSizeRequested': page})
+@app.route('/matrix', methods = ['PUT', 'DELETE'])
+def alterCompatibility():
+        u = request.args.get('uProductId')
+        v = request.args.get('vProductId')
+        if u is None or v is None:
+                abort(400) # missing arguments or auth header
+        return 204
+
+
+@app.before_request
+def before_request():
+        bearer = request.headers.get('Authorization')
+        e = BadRequest('No Authorization provided in headers. Attach a valid bearer token.')
+        e.data = {'Access': 'Denied', 'CODE': 'Unauthorized'}
+        if bearer is None or 'Bearer' not in bearer:
+                raise e
+
+
+@app.after_request
+def apply_caching(response):
+        response.headers["X-custom-header"] = "custom baat cheet"
+        return response
 
 
 @app.route('/api/users', methods = ['POST'])
