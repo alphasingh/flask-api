@@ -1,76 +1,60 @@
-from flask import Flask
-from flask.ext.restplus import Api, Resource, fields
+# Using flask to make an api 
+# import necessary libraries and functions 
+from flask import Flask, jsonify, request
+from flask_restplus import Api, Resource, fields
 
+
+# creating a Flask app 
 app = Flask(__name__)
-api = Api(app, version='1.0', title='Todo API',
-    description='A simple TODO API extracted from the original flask-restful example'
-)
 
-ns = api.namespace('todos', description='TODO operations')
-
-TODOS = {
-    'todo1': {'task': 'build an API'},
-    'todo2': {'task': '?????'},
-    'todo3': {'task': 'profit!'},
-}
-
-todo_fields = api.model('Todo', {
-    'task': fields.String(required=True, description='The task details')
-})
+# on the terminal type: curl http://127.0.0.1:5000/ 
+# returns hello world when we use GET. 
+# returns the data that we send when we use POST. 
+@app.route('/', methods = ['GET', 'POST'])
+def home():
+        status = "up"
+        return jsonify({'status': status})
 
 
-def abort_if_todo_doesnt_exist(todo_id):
-    if todo_id not in TODOS:
-        api.abort(404, "Todo {} doesn't exist".format(todo_id))
-
-parser = api.parser()
-parser.add_argument('task', type=str, required=True, help='The task details')
-
-
-@ns.route('/<string:todo_id>')
-@api.doc(responses={404: 'Todo not found'}, params={'todo_id': 'The Todo ID'})
-class Todo(Resource):
-    '''Show a single todo item and lets you delete them'''
-    @api.doc(notes='todo_id should be in {0}'.format(', '.join(TODOS.keys())))
-    @api.marshal_with(todo_fields)
-    def get(self, todo_id):
-        '''Fetch a given resource'''
-        abort_if_todo_doesnt_exist(todo_id)
-        return TODOS[todo_id]
-
-    def delete(self, todo_id):
-        '''Delete a given resource'''
-        abort_if_todo_doesnt_exist(todo_id)
-        del TODOS[todo_id]
-        return '', 204
-
-    @api.doc(parser=parser)
-    @api.marshal_with(todo_fields)
-    def put(self, todo_id):
-        '''Update a given resource'''
-        args = parser.parse_args()
-        task = {'task': args['task']}
-        TODOS[todo_id] = task
-        return task, 201
+# A simple function to calculate the square of a number 
+# the number to be squared is sent in the URL when we use GET 
+# on the terminal type: curl http://127.0.0.1:5000 / home / 10 
+# this returns 100 (square of 10) 
+@app.route('/square/<int:num>', methods = ['GET'])
+def disp(num):
+        return jsonify({'data': num**2}), 201
 
 
-@ns.route('/')
-class TodoList(Resource):
-    '''Shows a list of all todos, and lets you POST to add new tasks'''
-    @api.marshal_with(todo_fields, as_list=True)
-    def get(self):
-        '''List all todos'''
-        return TODOS
-
-    @api.doc(parser=parser)
-    @api.marshal_with(todo_fields)
-    def post(self):
-        '''Ceate a todo'''
-        args = parser.parse_args()
-        todo_id = 'todo%d' % (len(TODOS) + 1)
-        TODOS[todo_id] = {'task': args['task']}
-        return TODOS[todo_id], 201
+"""
+Function returns the dummy matrix in response
+"""
+@app.route('/matrix', methods = ['GET'])
+def getCompatibility():
+        return jsonify([
+            {'id': 1, 'name': 'Product 1', 'shortDescription': 'SD', 'fullDescription': 'FD', 'compatibleProducts':[2,4], 'categoryId':1, 'media':{'id':1,'key':'s3objectkey1', 'url':'https://swagger.io/'}},
+            {'id': 2, 'name': 'Product 2', 'shortDescription': 'SD2', 'fullDescription': 'FD2', 'compatibleProducts':[1], 'categoryId':2, 'media':{'id':2,'key':'s3objectkey2', 'url':'https://swagger.io/'}},
+            {'id': 4, 'name': 'Product 3', 'shortDescription': 'SD4', 'fullDescription': 'FD5', 'compatibleProducts':[1], 'categoryId':1, 'media':{'id':3,'key':'s3objectkey3', 'url':'https://swagger.io/'}}
+        ])
 
 
+@app.route('/matrix', methods = ['POST'])
+def createCompatibility():
+        username = request.json.get('u_id')
+        password = request.json.get('v_id')
+        v_id = request.args.get('v_id')
+        page = request.args.get('page', default = 1, type = int)
+        return jsonify({'vidinheader':v_id, 'username':username, 'pass': password, 'pageSizeRequested': page})
+
+
+@app.route('/api/users', methods = ['POST'])
+def createNewUser():
+    username = request.json.get('username')
+    password = request.json.get('password')
+    if username is None or password is None:
+        abort(400) # missing arguments
+    return jsonify({ 'username': username, 'password': username  }), 201, {'Location': url_for('get_user', id = user.id, _external = True)}
+
+
+# driver function 
 if __name__ == '__main__':
-    app.run(debug=True)
+        app.run(debug = True)
