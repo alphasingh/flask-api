@@ -1,6 +1,7 @@
 # Using flask to make an api 
 # import necessary libraries and functions 
 from flask import Flask, jsonify, request
+from flask_restplus import Api, Resource, fields
 
 
 # creating a Flask app 
