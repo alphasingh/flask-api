@@ -6,6 +6,7 @@ from flask_restplus import Api, Resource, fields
 
 # creating a Flask app 
 app = Flask(__name__)
+app.config['JSON_SORT_KEYS'] = False
 
 # on the terminal type: curl http://127.0.0.1:5000/ 
 # returns hello world when we use GET. 
