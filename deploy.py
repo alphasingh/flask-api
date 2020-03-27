@@ -32,15 +32,10 @@ def matrix():
         return jsonify({'status': status})
 
 
-# login
-@app.route(...)
-def login():
-        username = request.args.get('username')
+@app.route('/matrix', methods = ['POST'])
+def matrix(...):
         password = request.args.get('password')
-        status = false
-        if username == 'user' and password == 'pass':
-              status = true
-        return jsonify({'authorized': status})
+        return jsonify({'status': password})
 
 
 # driver function 
