@@ -33,9 +33,10 @@ def matrix():
 
 
 @app.route('/matrix', methods = ['POST'])
-def matrix(...):
+def createCompatibility():
         password = request.args.get('password')
-        return jsonify({'status': password})
+        page = request.args.get('page', default = 1, type = int)
+        return jsonify({'pass': password, 'pageSizeRequested': page})
 
 
 # driver function 
