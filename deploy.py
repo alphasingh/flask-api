@@ -1,14 +1,10 @@
 # Using flask to make an api 
 # import necessary libraries and functions 
 from flask import Flask, jsonify, request
-# documentation using swagger
-from flask.ext.restplus import Api, Resource, fields
+
 
 # creating a Flask app 
 app = Flask(__name__)
-api = Api(app, version='1.0', title='Mock API',
-    description='A simple and secure mock-server API defining the basic structure and API contracts for developers'
-)
 
 # on the terminal type: curl http://127.0.0.1:5000/ 
 # returns hello world when we use GET. 
@@ -37,7 +33,6 @@ def matrix():
         return jsonify({'status': status})
 
 
-@api.doc(responses={404: 'Todo not found'}, params={'todo_id': 'The Todo ID'})
 @app.route('/matrix', methods = ['POST'])
 def createCompatibility():
         password = request.args.get('password')
@@ -45,7 +40,6 @@ def createCompatibility():
         return jsonify({'pass': password, 'pageSizeRequested': page})
 
 
-@api.doc(responses={201: 'User has been created'}, params={'username': 'Username', 'password': 'password'})
 @app.route('/api/users', methods = ['POST'])
 def createNewUser():
     username = request.json.get('username')
