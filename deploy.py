@@ -30,7 +30,7 @@ def disp(num):
 """
 Function returns the dummy matrix in response
 """
-@app.route('/matrix', methods = ['GET'])
+@app.route('/product/compatible', methods = ['GET'])
 def getCompatibility():
         return jsonify([
             {'id': 1, 'name': 'Product 1', 'shortDescription': 'SD', 'fullDescription': 'FD', 'compatibleProducts':[14,4], 'categoryId':1, 'media':{'id':1,'key':'s3objectkey1', 'url':'https://swagger.io/'}},
@@ -41,13 +41,13 @@ def getCompatibility():
         ])
 
 
-@app.route('/matrix', methods = ['PUT', 'DELETE'])
+@app.route('/product/compatible', methods = ['PUT', 'DELETE'])
 def alterCompatibility():
-        u = request.args.get('uProductId')
-        v = request.args.get('vProductId')
+        u = request.args.get('productId1')
+        v = request.args.get('productId2')
         if u is None or v is None:
                 abort(400) # missing arguments or auth header
-        return ('', 204)
+        return ('', 200)
 
 
 @app.before_request
