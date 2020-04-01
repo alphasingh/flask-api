@@ -33,6 +33,7 @@ Function returns the dummy matrix in response
 """
 @app.route('/product/compatible', methods = ['GET'])
 def getCompatibility():
+        authorizeRequest()
         return jsonify([
             {'id': 1, 'name': 'Product 1', 'shortDescription': 'SD', 'fullDescription': 'FD', 'compatibleProducts':[14,4], 'categoryId':1, 'media':{'id':1,'key':'s3objectkey1', 'url':'https://swagger.io/'}},
             {'id': 2, 'name': 'Product 2', 'shortDescription': 'SD2', 'fullDescription': 'FD2', 'compatibleProducts':[14], 'categoryId':2, 'media':{'id':12,'key':'s3objectkey2', 'url':'https://swagger.io/'}},
@@ -44,6 +45,7 @@ def getCompatibility():
 
 @app.route('/product/compatible', methods = ['PUT', 'DELETE'])
 def alterCompatibility():
+        authorizeRequest()
         u = request.args.get('productId1')
         v = request.args.get('productId2')
         if u is None or v is None:
@@ -51,8 +53,8 @@ def alterCompatibility():
         return ('', 200)
 
 
-@app.before_request
-def before_request():
+#@app.before_request
+def authorizeRequest():
         bearer = request.headers.get('Authorization')
         e = BadRequest('No Authorization provided in headers. Attach a valid bearer token.')
         e.data = {'Access': 'Denied', 'CODE': 'Unauthorized'}
@@ -98,6 +100,7 @@ def getAllDriversSchedules():
         return (jsonify(driverSchedules), 200)
 @app.route('/drivers/schedules', methods = ['POST'])
 def createDriverSchedule():
+        authorizeRequest()
         body = request.get_json()
         newScheduleKeys = body.keys()
         #driverScheduleModel.validate(newSchedule)
@@ -115,6 +118,7 @@ def createDriverSchedule():
         return (jsonify(newSchedule), 201)
 @app.route('/drivers/schedules/<int:id>', methods = ['PATCH'])
 def updateDriverSchedule(id):
+        authorizeRequest()
         totalNumberOfSchedules = len(driverSchedules)
         if id > totalNumberOfSchedules or id < 0:
                 return (jsonify({'error':'No schedule found for id'}), 400)
@@ -126,6 +130,7 @@ def updateDriverSchedule(id):
         return (jsonify(existingSchedule), 200)
 @app.route('/drivers/schedules/<int:id>', methods = ['DELETE'])
 def deleteDriverSchedule(id):
+        authorizeRequest()
         return '', 200
 
 
