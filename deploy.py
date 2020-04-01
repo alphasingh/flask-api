@@ -8,6 +8,7 @@ from werkzeug.exceptions import BadRequest
 # creating a Flask app 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
+api = Api(app)
 
 # on the terminal type: curl http://127.0.0.1:5000/ 
 # returns hello world when we use GET. 
@@ -72,6 +73,37 @@ def createNewUser():
     if username is None or password is None:
         abort(400) # missing arguments
     return jsonify({ 'username': username, 'password': username  }), 201, {'Location': url_for('get_user', id = user.id, _external = True)}
+
+
+'''
+Driver related schedules
+'''
+ns = api.namespace('/drivers/schedules', description='Operations related to driver schedules')
+scheduleModel = api.model('Driver Schedule', {
+        'id': fields.Integer(description='The unique identifier of the schedule'),
+        'driverId': fields.Integer(required=True, description='The unique identifier of the driver'),
+        'zoneId': fields.Integer(required=True, description='The unique identifier of the zone in which driver will work'),
+        'startTime': fields.DateTime(required=True, description='The start time of this driver schedule'),
+        'endTime': fields.DateTime(required=True, description='The end time of this driver schedule'),
+        'createdAt': fields.DateTime,
+        'updatedAt': fields.DateTime
+})
+driverSchedules = [
+                { 'id':1, 'driverId':5, 'zoneId':4, 'startTime':'2020-03-31T02:26:10Z', 'endTime':'2020-03-31T12:26:10Z', 'createdAt':'2020-03-25T02:26:10Z', 'updatedAt':'2020-03-25T02:26:10Z'},
+                { 'id':2, 'driverId':4, 'zoneId':4, 'startTime':'2020-03-31T02:26:10Z', 'endTime':'2020-03-31T12:26:10Z', 'createdAt':'2020-03-25T02:26:10Z', 'updatedAt':'2020-03-25T02:26:10Z'},
+                { 'id':3, 'driverId':5, 'zoneId':5, 'startTime':'2020-03-32T02:26:10Z', 'endTime':'2020-03-31T12:26:10Z', 'createdAt':'2020-03-25T02:26:10Z', 'updatedAt':'2020-03-25T02:26:10Z'}
+        ]
+@ns.route('/')
+class DriverSchedule(Resource):
+        @api.response(201, 'Driver schedule successfully created.')
+        @api.expect(scheduleModel)
+        def post(self):
+                return (jsonify(driverSchedules[0]), 201)
+        
+        @api.response(400, 'Driver schedule does not exist.')
+        def get(self, id):
+                return (jsonify(driverSchedules[1]), 200)
+        
 
 
 # driver function 
