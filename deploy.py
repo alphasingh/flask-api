@@ -105,7 +105,7 @@ def createDriverSchedule():
         newSchedule['createdAt']=newDate
         newSchedule['updatedAt']=newDate
         driverSchedules.append(newSchedule)
-        return (jsonify(driverSchedules[newId]), 201)
+        return (jsonify(newSchedule)), 201)
 @app.route('/drivers/schedules/<int:id>', methods = ['PATCH'])
 def updateDriverSchedule(id):
         totalNumberOfSchedules = len(driverSchedules)
@@ -113,8 +113,9 @@ def updateDriverSchedule(id):
                 return (jsonify({'error':'No schedule found for id'}), 400)
         updates = request.get_json()
         existingSchedule = driverSchedules[id-1]
-        for key in {'zoneId', 'startTime', 'endTime'}:
-                if updates[key]:
+        updateKeys = {'driverId', 'zoneId', 'startTime', 'endTime'}
+        for key in updates.keys():
+                if key in updateKeys:
                         existingSchedule[key]=updates[key]
         return (jsonify(existingSchedule), 200)
 @app.route('/drivers/schedules/<int:id>', methods = ['DELETE'])
