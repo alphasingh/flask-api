@@ -105,7 +105,7 @@ def createDriverSchedule():
         newSchedule['createdAt']=newDate
         newSchedule['updatedAt']=newDate
         driverSchedules.append(newSchedule)
-        return (jsonify(newSchedule)), 201)
+        return (jsonify(newSchedule), 201)
 @app.route('/drivers/schedules/<int:id>', methods = ['PATCH'])
 def updateDriverSchedule(id):
         totalNumberOfSchedules = len(driverSchedules)
