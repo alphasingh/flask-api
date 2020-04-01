@@ -105,10 +105,10 @@ def createDriverSchedule():
                 if requiredKey not in newScheduleKeys:
                         return (jsonify({'error':'Missing required key:'+requiredKey, 'Given':newScheduleKeys}), 400)
         newSchedule = {}
+        newSchedule['id']=len(driverSchedules)+1
         for key in newScheduleKeys:
                 if key in updateKeys:
                         newSchedule[key]=body[key]
-        newSchedule['id']=len(driverSchedules)
         newSchedule['createdAt']=newSchedule['startTime']
         newSchedule['updatedAt']=newSchedule['startTime']
         driverSchedules.append(newSchedule)
@@ -116,7 +116,7 @@ def createDriverSchedule():
 @app.route('/drivers/schedules/<int:id>', methods = ['PATCH'])
 def updateDriverSchedule(id):
         totalNumberOfSchedules = len(driverSchedules)
-        if id >= totalNumberOfSchedules or id < 0:
+        if id > totalNumberOfSchedules or id < 0:
                 return (jsonify({'error':'No schedule found for id'}), 400)
         updates = request.get_json()
         existingSchedule = driverSchedules[id-1]
