@@ -80,13 +80,13 @@ def createNewUser():
 '''
 Driver related schedules
 '''
-ns = api.namespace('/drivers-schedules', description='Operations related to driver schedules')
-driverScheduleModel = api.model('Driver Schedule', {
+ns = api.namespace('drivers-schedules', description='Operations related to driver schedules')
+driverScheduleModel = api.model('DriverSchedule', {
         'id': fields.Integer(description='The unique identifier of the schedule'),
         'driverId': fields.Integer(required=True, description='The unique identifier of the driver'),
         'zoneId': fields.Integer(required=True, description='The unique identifier of the zone in which driver will work'),
-        'startTime': fields.String(required=True, description='The start time of this driver schedule'),
-        'endTime': fields.String(required=True, description='The end time of this driver schedule'),
+        'startTime': fields.DateTime(required=True, description='The start time of this driver schedule'),
+        'endTime': fields.DateTime(required=True, description='The end time of this driver schedule'),
         'createdAt': fields.DateTime,
         'updatedAt': fields.DateTime
 })
@@ -98,8 +98,9 @@ driverSchedules = [
 updateKeys = {'driverId', 'zoneId', 'startTime', 'endTime'}
 @ns.route('/')
 class DriverSchedule(Resource):
-        @api.response(201, 'Driver schedule successfully created.')
-        @api.expect(driverScheduleModel)
+        @ns.response(201, 'Driver schedule successfully created.')
+        @ns.expect(driverScheduleModel)
+        @ns.marshal_with(driverScheduleModel, code=201)
         def post(self):
                 return (jsonify(driverSchedules[0]), 201)
         @api.response(400, 'Driver schedule does not exist.')
