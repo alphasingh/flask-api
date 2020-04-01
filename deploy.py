@@ -92,18 +92,25 @@ driverSchedules = [
                 { 'id':2, 'driverId':4, 'zoneId':4, 'startTime':'2020-03-31T02:26:10Z', 'endTime':'2020-03-31T12:26:10Z', 'createdAt':'2020-03-25T02:26:10Z', 'updatedAt':'2020-03-25T02:26:10Z'},
                 { 'id':3, 'driverId':5, 'zoneId':5, 'startTime':'2020-03-32T02:26:10Z', 'endTime':'2020-03-31T12:26:10Z', 'createdAt':'2020-03-25T02:26:10Z', 'updatedAt':'2020-03-25T02:26:10Z'}
         ]
+updateKeys = {'driverId', 'zoneId', 'startTime', 'endTime'}
 @app.route('/drivers/schedules', methods = ['GET'])
 def getAllDriversSchedules():
         return (jsonify(driverSchedules), 200)
 @app.route('/drivers/schedules', methods = ['POST'])
 def createDriverSchedule():
-        newSchedule = request.get_json()
-        driverScheduleModel.validate(newSchedule)
-        newId = len(driverSchedules) + 1
-        newDate = driverScheduleModel['startTime']
-        newSchedule['id']=newId
-        newSchedule['createdAt']=newDate
-        newSchedule['updatedAt']=newDate
+        body = request.get_json()
+        newScheduleKeys = body.keys()
+        #driverScheduleModel.validate(newSchedule)
+        for requiredKey in updateKeys:
+                if requiredKey not in newScheduleKeys:
+                        return (jsonify({'error':'Missing required key:'+requiredKey, 'Given':newScheduleKeys}), 400)
+        newSchedule = {}
+        for key in newScheduleKeys:
+                if key in updateKeys:
+                        newSchedule[key]=body[key]
+        newSchedule['id']=len(driverSchedules)
+        newSchedule['createdAt']=newSchedule['startTime']
+        newSchedule['updatedAt']=newSchedule['startTime']
         driverSchedules.append(newSchedule)
         return (jsonify(newSchedule), 201)
 @app.route('/drivers/schedules/<int:id>', methods = ['PATCH'])
@@ -113,7 +120,6 @@ def updateDriverSchedule(id):
                 return (jsonify({'error':'No schedule found for id'}), 400)
         updates = request.get_json()
         existingSchedule = driverSchedules[id-1]
-        updateKeys = {'driverId', 'zoneId', 'startTime', 'endTime'}
         for key in updates.keys():
                 if key in updateKeys:
                         existingSchedule[key]=updates[key]
