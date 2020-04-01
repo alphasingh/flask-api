@@ -82,8 +82,8 @@ driverScheduleModel = api.model('Driver Schedule', {
         'id': fields.Integer(description='The unique identifier of the schedule'),
         'driverId': fields.Integer(required=True, description='The unique identifier of the driver'),
         'zoneId': fields.Integer(required=True, description='The unique identifier of the zone in which driver will work'),
-        'startTime': fields.DateTime(required=True, description='The start time of this driver schedule'),
-        'endTime': fields.DateTime(required=True, description='The end time of this driver schedule'),
+        'startTime': fields.String(required=True, description='The start time of this driver schedule'),
+        'endTime': fields.String(required=True, description='The end time of this driver schedule'),
         'createdAt': fields.DateTime,
         'updatedAt': fields.DateTime
 })
