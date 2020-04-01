@@ -95,13 +95,29 @@ driverSchedules = [
 @app.route('/drivers/schedules', methods = ['GET'])
 def getAllDriversSchedules():
         return (jsonify(driverSchedules), 200)
-
 @app.route('/drivers/schedules', methods = ['POST'])
 def createDriverSchedule():
         newSchedule = request.get_json()
         driverScheduleModel.validate(newSchedule)
-        return (jsonify(driverSchedules[1]), 201)
-@app.route('/drivers/schedules/<int:id>', methods = ['POST'])
+        newId = len(driverSchedules) + 1
+        newDate = driverScheduleModel['startTime']
+        newSchedule['id']=newId
+        newSchedule['createdAt']=newDate
+        newSchedule['updatedAt']=newDate
+        driverSchedules.append(newSchedule)
+        return (jsonify(driverSchedules[newId]), 201)
+@app.route('/drivers/schedules/<int:id>', methods = ['PATCH'])
+def updateDriverSchedule(id):
+        totalNumberOfSchedules = len(driverSchedules)
+        if id >= totalNumberOfSchedules or id < 0:
+                return (jsonify({'error':'No schedule found for id'}), 400)
+        updates = request.get_json()
+        existingSchedule = driverSchedules[id-1]
+        for key in {'zoneId', 'startTime', 'endTime'}:
+                if updates[key]:
+                        existingSchedule[key]=updates[key]
+        return (jsonify(existingSchedule), 200)
+@app.route('/drivers/schedules/<int:id>', methods = ['DELETE'])
 def deleteDriverSchedule(id):
         return '', 200
 
