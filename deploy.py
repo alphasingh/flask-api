@@ -22,7 +22,7 @@ apiStatus = {
         'since':'27 March 2020'
 }
 @app.route('/status', methods=['POST'])
-def getApiStatus(self):
+def getApiStatus():
         return (jsonify(apiStatus), 200)
 
 
