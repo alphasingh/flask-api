@@ -3,6 +3,7 @@
 Deployed currently on https://appscoop-mock-api-test0.herokuapp.com/
 
 Contact for Mock API docs.
+By default, some API endpoints have been documented via swagger.
 
 An authorization has to be provided in Headers:
 
