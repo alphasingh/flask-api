@@ -16,13 +16,13 @@ api = Api(app)
 #################################################################################################################
 nsApiStatus = api.namespace('status', description='Restful API status')
 apiStatus = {
-                'status':"up",
-                'docs':"https://appscoop-mock-api-test0.herokuapp.com",
-                'contribute':"https://github.com/alphasingh/flask-api",
+                'status':'up',
+                'docs':'https://appscoop-mock-api-test0.herokuapp.com',
+                'contribute':'https://github.com/alphasingh/flask-api',
                 'author':{
-                        'name':"Abhay Raj Singh",
-                        'contact':"abhayraja4@gmail.com",
-                        'since':"27 March 2020"
+                        'name':'Abhay Raj Singh',
+                        'contact':'abhayraja4@gmail.com',
+                        'since':'27 March 2020'
                 }
 }
 @nsApiStatus.route('/')
