@@ -10,22 +10,38 @@ app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 api = Api(app)
 
-# on the terminal type: curl http://127.0.0.1:5000/ 
-# returns hello world when we use GET. 
-# returns the data that we send when we use POST. 
-@app.route('/', methods = ['GET', 'POST'])
-def home():
-        status = "up"
-        return jsonify({'status': status})
+
+#################################################################################################################
+#       API STATUS
+#################################################################################################################
+nsApiStatus = api.namespace('', description='Restful API status')
+apiStatus = {
+                "status":"up",
+                "docs":"https://appscoop-mock-api-test0.herokuapp.com",
+                "contribute":"https://github.com/alphasingh/flask-api",
+                "author":{
+                        "name":"Abhay Raj Singh",
+                        "contact":"abhayraja4@gmail.com",
+                        "since":"27 March 2020"
+                }
+}
+@nsApiStatus.route('/', methods = ['POST'])
+class ApiStatus(Resource):
+        @ns.response(200, 'Latest API information successfully fetched.')
+        def post(self):
+                return (jsonify(apiStatus), 200)
 
 
-# A simple function to calculate the square of a number 
-# the number to be squared is sent in the URL when we use GET 
-# on the terminal type: curl http://127.0.0.1:5000 / home / 10 
-# this returns 100 (square of 10) 
-@app.route('/square/<int:num>', methods = ['GET'])
-def disp(num):
-        return jsonify({'data': num**2}), 201
+#################################################################################################################
+#       SQUARE OF A NUMBER
+#################################################################################################################
+nsSquareOfNumber = api.namespace('square', description='Calculate square of a number')
+@nsSquareOfNumber.route('/square')
+class SquareOfNumber(Resource):
+        @nsSquareOfNumber.response(200, 'Successfully returned square of the given number.')
+        @nsSquareOfNumber.route('/<int:number>')
+        def get(number):
+                return (jsonify({"number":number, "square": number**2}), 200)
 
 
 """
