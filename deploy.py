@@ -35,13 +35,13 @@ class ApiStatus(Resource):
 #################################################################################################################
 #       SQUARE OF A NUMBER
 #################################################################################################################
-nsSquareOfNumber = api.namespace('square', description='Calculate square of a number')
-@nsSquareOfNumber.route('/')
-class SquareOfNumber(Resource):
-        @nsSquareOfNumber.response(200, 'Successfully returned square of the given number.')
-        @nsSquareOfNumber.route('/<int:number>')
-        def get(self):
-                return (jsonify({"number":number, "square": number**2}), 200)
+# nsSquareOfNumber = api.namespace('square', description='Calculate square of a number')
+# @nsSquareOfNumber.route('/')
+# class SquareOfNumber(Resource):
+#         @nsSquareOfNumber.response(200, 'Successfully returned square of the given number.')
+#         @nsSquareOfNumber.route('/<int:number>')
+#         def get(self, number):
+#                 return (jsonify({"number":number, "square": number**2}), 200)
 
 
 """
