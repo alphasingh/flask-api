@@ -14,13 +14,16 @@ api = Api(app)
 #################################################################################################################
 #       API STATUS
 #################################################################################################################
-nsApiStatus = api.namespace('status', description='Restful API status')
-apiStatus = {'status':'up','docs':'https://appscoop-mock-api-test0.herokuapp.com','contribute':'https://github.com/alphasingh/flask-api','author':'Abhay Raj Singh','since':'27 March 2020'}
-@nsApiStatus.route('/')
-class ApiStatus(Resource):
-        @nsApiStatus.response(200, 'Latest API information successfully fetched.')
-        def post(self):
-                return (jsonify(apiStatus), 200)
+apiStatus = {
+        'status':'up',
+        'docs':'https://appscoop-mock-api-test0.herokuapp.com',
+        'contribute':'https://github.com/alphasingh/flask-api',
+        'author':'Abhay Raj Singh',
+        'since':'27 March 2020'
+}
+@app.route('/status', methods=['POST'])
+def getApiStatus(self):
+        return (jsonify(apiStatus), 200)
 
 
 #################################################################################################################
