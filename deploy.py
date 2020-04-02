@@ -14,7 +14,7 @@ api = Api(app)
 #################################################################################################################
 #       API STATUS
 #################################################################################################################
-nsApiStatus = api.namespace('', description='Restful API status')
+nsApiStatus = api.namespace('status', description='Restful API status')
 apiStatus = {
                 "status":"up",
                 "docs":"https://appscoop-mock-api-test0.herokuapp.com",
@@ -25,8 +25,8 @@ apiStatus = {
                         "since":"27 March 2020"
                 }
 }
-@nsApiStatus.route('/')
 class ApiStatus(Resource):
+        @nsApiStatus.route('/')
         @nsApiStatus.response(200, 'Latest API information successfully fetched.')
         def post(self):
                 return (jsonify(apiStatus), 200)
@@ -36,7 +36,6 @@ class ApiStatus(Resource):
 #       SQUARE OF A NUMBER
 #################################################################################################################
 nsSquareOfNumber = api.namespace('square', description='Calculate square of a number')
-@nsSquareOfNumber.route('/square')
 class SquareOfNumber(Resource):
         @nsSquareOfNumber.response(200, 'Successfully returned square of the given number.')
         @nsSquareOfNumber.route('/<int:number>')
@@ -119,7 +118,7 @@ class DriverSchedule(Resource):
         @ns.marshal_with(driverScheduleModel, code=201)
         def post(self):
                 return (jsonify(driverSchedules[0]), 201)
-        @api.response(400, 'Driver schedule does not exist.')
+        @ns.response(400, 'Driver schedule does not exist.')
         def get(self, id):
                 return (jsonify(driverSchedules[1]), 200)
 
