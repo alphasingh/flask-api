@@ -25,8 +25,8 @@ apiStatus = {
                         "since":"27 March 2020"
                 }
 }
+@nsApiStatus.route('/')
 class ApiStatus(Resource):
-        @nsApiStatus.route('/')
         @nsApiStatus.response(200, 'Latest API information successfully fetched.')
         def post(self):
                 return (jsonify(apiStatus), 200)
@@ -36,10 +36,11 @@ class ApiStatus(Resource):
 #       SQUARE OF A NUMBER
 #################################################################################################################
 nsSquareOfNumber = api.namespace('square', description='Calculate square of a number')
+@nsApiStatus.route('/')
 class SquareOfNumber(Resource):
         @nsSquareOfNumber.response(200, 'Successfully returned square of the given number.')
-        @nsSquareOfNumber.route('/<int:number>')
-        def get(number):
+        @nsSquareOfNumber.route('<int:number>')
+        def get(self):
                 return (jsonify({"number":number, "square": number**2}), 200)
 
 
