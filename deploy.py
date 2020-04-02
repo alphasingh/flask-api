@@ -25,9 +25,9 @@ apiStatus = {
                         "since":"27 March 2020"
                 }
 }
-@nsApiStatus.route('/', methods = ['POST'])
+@nsApiStatus.route('/')
 class ApiStatus(Resource):
-        @ns.response(200, 'Latest API information successfully fetched.')
+        @nsApiStatus.response(200, 'Latest API information successfully fetched.')
         def post(self):
                 return (jsonify(apiStatus), 200)
 
