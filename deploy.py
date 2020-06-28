@@ -21,7 +21,7 @@ apiStatus = {
         'author':'Abhay Raj Singh',
         'since':'27 March 2020'
 }
-@app.route('/status', methods=['POST'])
+@app.route('/status', methods=['POST', 'GET'])
 def getApiStatus():
         return (jsonify(apiStatus), 200)
 
